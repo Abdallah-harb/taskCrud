@@ -28,6 +28,7 @@ class UserController extends Controller
                'name' => $request->name,
                "email" => $request->email,
                "password" =>bcrypt($request->password),
+                "mobile" => $request->mobile
             ]);
             Auth::login($user);
             Mail::to($request->email)->send(new UserMail());
@@ -40,18 +41,14 @@ class UserController extends Controller
         $user = User::whereId($id)->first();
         return view('users.edit',compact('user'));
     }
-    public function update(Request $request,$id){
+    public function update(UserRequest $request,$id){
         try {
             $user = User::find($id);
             if(!$user){
-                return redirect()->back()->with(['error' => "There are error on data"]);
+                return redirect()->route('user-all')->with(['error' => "There are error on data"]);
             }
-            $user->update([
-                "name" => $request->name,
-                "email" => $request->email,
-                "phone" => $request->phone,
-            ]);
-            return redirect()->back()->with(['success' => "Data updated Successfully"]);
+            $user->update($request->except('_token','id'));
+            return redirect()->route('user-all')->with(['success' => "Data updated Successfully"]);
         }catch (\Exception $ex){
             return redirect()->back()->with(['error' => $ex->getMessage()]);
         }
@@ -59,12 +56,12 @@ class UserController extends Controller
 
     public function delete($id){
         try {
-            $user = User::whereId($id)->first();
+            $user = User::find($id);
             if(!$user){
-                return redirect()->back()->with(['error' => "there are error on data"]);
+                return redirect()->route('user-all')->with(['error' => "there are error on data"]);
             }
             $user->delete();
-            return redirect()->route('user-all')->with(['success' => "User delete successfully"]);
+            return redirect()->route('dashboard')->with(['success' => "User delete successfully"]);
         }catch (\Exception $e){
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }

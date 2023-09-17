@@ -35,6 +35,12 @@
             <br><br>
             <div class="row">
                 <div class="col">
+                    <input type="text" class="form-control" name ="mobile" placeholder=" Mobile">
+                </div>
+                @error('mobile')
+                <div class="error">{{ $message }}</div>
+                @enderror
+                <div class="col">
                     <input type="password" class="form-control" name="password" placeholder=" user-password">
                 </div>
                 @error('password')

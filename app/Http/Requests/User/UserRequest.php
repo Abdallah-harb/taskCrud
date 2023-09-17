@@ -23,9 +23,9 @@ class UserRequest extends FormRequest
     {
         return [
             "name" => "required|string|max:50",
-            "email" => "required|email|unique:users,email",
+            "email" => "required|email|unique:users,email,".$this->id,
             "password" => "required |string|min:6",
-            "phone" =>  "required|string|max:17",
+            "mobile" =>  "required|string|unique:users,mobile,".$this->id,
         ];
     }
 }
