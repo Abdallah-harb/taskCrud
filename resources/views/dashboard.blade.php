@@ -1,33 +1,48 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
-        @if(Session::has('success'))
-        <div class="alert alert-success" role="alert">
-            {{Session::get('success')}}
-        </div>
-         @endif
-    @if(Session::has('error'))
-        <div class="alert alert-danger" role="alert">
-            {{Session::get('error')}}
-        </div>
-        @endif
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    <a href="{{route('user-create')}}" class="btn btn-primary">Creat User</a>
-                    <a href="{{route('user-all')}}" class="btn btn-primary">All Users</a>
+@extends('layouts.master')
+@section('css')
 
-                </div>
+    @section('title')
+        Dashboard
+    @stop
+@endsection
+@section('page-header')
+    <!-- breadcrumb -->
+    <div class="page-title">
+        <div class="row">
+            <div class="col-sm-6">
+                <h4 class="mb-0"> Dashboard</h4>
             </div>
-
+            <div class="col-sm-6">
+                <ol class="breadcrumb pt-0 pr-0 float-left float-sm-right ">
+                    <li class="breadcrumb-item"><a href="{{route('dashboard')}}" class="default-color">Home</a></li>
+                    <li class="breadcrumb-item active">Dashboard</li>
+                </ol>
+            </div>
         </div>
     </div>
-</x-app-layout>
+    <!-- breadcrumb -->
+@endsection
+@section('content')
+    <!-- row -->
+    <div class="row">
+        <div class="col-xl-12 mb-30">
+            <div class="card card-statistics h-100">
+                <div class="card-body">
 
-{{--bootstrap Moodel--}}
-<!-- Modal -->
 
+                    <br><br>
+                    @if ($errors->any())
+                        <div class="alert alert-danger">
+                            <ul>
+                                @foreach ($errors->all() as $error)
+                                    <li>{{ $error }}</li>
+                                @endforeach
+                            </ul>
+                        </div>
+                    @endif
+
+    <!-- row closed -->
+@endsection
+@section('js')
+
+@endsection

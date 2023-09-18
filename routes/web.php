@@ -29,14 +29,13 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
 });
+
 // crud user
 Route::group(['prefix' =>'users','middleware' => "auth"],function(){
-    Route::get('create-user',[UserController::class,'create'])->name('user-create');
     Route::get('all-user',[UserController::class,'index'])->name('user-all');
     Route::post('store-user',[UserController::class,'store'])->name('user-store');
-    Route::get('edit-user/{id}',[UserController::class,'edit'])->name('user-edit');
     Route::post('update/{id}',[UserController::class,'update'])->name('user-update');
-    Route::get('delete/{id}',[UserController::class,'delete'])->name('user.delete');
+    Route::post('delete/{id}',[UserController::class,'delete'])->name('user.delete');
 });
 
 require __DIR__.'/auth.php';

@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
             "name" => "required|string|max:50",
             "email" => "required|email|unique:users,email,".$this->id,
             "password" => "required |string|min:6",
+            "password_confirmation" => "required |string|same:password",
             "mobile" =>  "required|string|unique:users,mobile,".$this->id,
         ];
     }

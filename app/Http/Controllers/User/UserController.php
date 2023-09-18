@@ -14,13 +14,8 @@ use function PHPUnit\Framework\containsIdentical;
 class UserController extends Controller
 {
     public function index(){
-        $users = User::get();
-
+        $users = User::where('id','<>',auth()->user()->id)->get();
       return  view('users.index',compact('users'));
-    }
-    public function create()
-    {
-        return view('users.create');
     }
     public function store(UserRequest $request){
         try {
@@ -32,19 +27,18 @@ class UserController extends Controller
             ]);
             Auth::login($user);
             Mail::to($request->email)->send(new UserMail());
-            return redirect()->route('user-all')->with(['success' => "User create successfully And email send"]);
+            return redirect()->route('user-all')->with(['success'=>'Data save successfully']);
         }catch (\Exception $ex){
+            toastr()->error('There are error on data',['timeOut' => 8000]);
             return redirect()->back()->with(['error' => $ex->getMessage()]);
         }
-    }
-    public function edit($id){
-        $user = User::whereId($id)->first();
-        return view('users.edit',compact('user'));
     }
     public function update(UserRequest $request,$id){
         try {
             $user = User::find($id);
             if(!$user){
+                toastr()->warning('there are error on data');
+
                 return redirect()->route('user-all')->with(['error' => "There are error on data"]);
             }
             $user->update($request->except('_token','id'));
@@ -54,15 +48,20 @@ class UserController extends Controller
         }
     }
 
-    public function delete($id){
+    public function delete(Request $request){
         try {
-            $user = User::find($id);
+            $user = User::find($request->id);
             if(!$user){
+                toastr()->warning('there are error on data');
+
                 return redirect()->route('user-all')->with(['error' => "there are error on data"]);
             }
+            toastr()->warning('User Delete');
             $user->delete();
-            return redirect()->route('dashboard')->with(['success' => "User delete successfully"]);
+            return redirect()->route('user-all')->with(['success' => "User delete successfully"]);
         }catch (\Exception $e){
+            toastr()->warning('there are error on data');
+
             return redirect()->back()->with(['error' => $e->getMessage()]);
         }
     }
